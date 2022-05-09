@@ -1,0 +1,24 @@
+server:
+  hostname: NODE_SERVER_HOSTNAME
+  timeout:  NODE_SERVER_TIMEOUT
+  port:  NODE_SERVER_PORT
+application:
+  debug: NODE_APPLICATION_DEBUG
+vault:
+  host: NODE_VAULT_HOST
+  port: NODE_VAULT_PORT
+  auth:
+    appRole:
+      roleID: NODE_VAULT_APP_ROLE_ROLE_ID
+      secretID: NODE_VAULT_APP_ROLE_SECRET_ID
+  paths:
+    token:
+      app: NODE_VAULT_TOKEN_PATH
+    secrets:
+      mysql: NODE_VAULT_SECRETS_MYSQL_PATH
+    encryption:
+      data: NODE_VAULT_DATA_ENCRYPTION_PATH
+      encrypt: NODE_VAULT_DATA_ENCRYPTION_PATH
+      decrypt: NODE_VAULT_DATA_DECRYPTION_PATH
+      rewrap: NODE_VAULT_DATA_REWRAP_PATH
+      rotateKey: NODE_VAULT_DATA_ROTATE_KEY_PATH

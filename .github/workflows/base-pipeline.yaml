@@ -5,11 +5,19 @@ on:
 
 
 jobs:
-  # Apply Infrastructure configurations when action=='create'.
+
   snyk:
     name: Code security scan
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-code-scan.workflow.yaml@master
     with:
       language-tooling: nodejs
+    secrets:
+      snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}
+
+  nodejs-build:
+    name: NodeJS build and test
+    uses: filipefigueredo/nestjs-hello-ts/.github/nodejs-build.workflow.yaml@master
+    with:
+      node-version: '16'
     secrets:
       snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}

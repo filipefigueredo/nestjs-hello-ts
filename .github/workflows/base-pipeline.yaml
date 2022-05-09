@@ -16,7 +16,7 @@ jobs:
 
   nodejs-build:
     name: NodeJS build and test
-    uses: filipefigueredo/nestjs-hello-ts/.github/nodejs-build.workflow.yaml@master
+    uses: filipefigueredo/nestjs-hello-ts/.github/workflows/nodejs-build.workflow.yaml@master
     with:
       node-version: '16'
     secrets:

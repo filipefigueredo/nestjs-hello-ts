@@ -23,7 +23,7 @@ on:
         default: hub.docker.io
       registry_username:
         description: Container registry username
-        required: false
+        required: true
       registry_password:
         description: Password or personal access token used to log against the container registry
         required: true

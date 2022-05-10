@@ -19,8 +19,7 @@ on:
     secrets:
       registry_name:
         description: Container registry hostname
-        required: false
-        default: 'hub.docker.io'
+        required: true
       registry_username:
         description: Container registry username
         required: true

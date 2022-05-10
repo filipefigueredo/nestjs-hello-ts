@@ -43,7 +43,7 @@ jobs:
       - name: Login to container registry
         uses: docker/login-action@v2
         with:
-          registry: hub.docker.io
+          registry: ${{ secrets.registry_name }}
           username: ${{ secrets.registry_username }}
           password: ${{ secrets.registry_password }}
 

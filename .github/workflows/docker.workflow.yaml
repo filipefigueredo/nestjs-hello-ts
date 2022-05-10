@@ -20,7 +20,7 @@ on:
       registry_name:
         description: Container registry hostname
         required: false
-        default: hub.docker.io
+        default: 'hub.docker.io'
       registry_username:
         description: Container registry username
         required: true

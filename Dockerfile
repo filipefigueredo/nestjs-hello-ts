@@ -14,6 +14,7 @@
 ###################################################################################################
 # Build environment image (used for building the application                                      #
 ###################################################################################################
+# syntax = docker/dockerfile:1.4
 FROM node:16 AS build-environment
 
 # due to default /opt permissions we have to create the directory with root and change permissions.
@@ -35,9 +36,11 @@ COPY . .
 RUN npm install -g npm@8
 
 # Run npm command to install application dependencies build and remove non-production packages.
-RUN npm ci \
-    && npm run build \
-    && npm prune --production
+RUN <<EOT
+  npm ci
+  npm run build
+  npm prune --production
+EOT
 
 ###################################################################################################
 # Base image (used for deployment)                                                                #

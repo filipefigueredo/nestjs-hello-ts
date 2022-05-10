@@ -1,24 +1,14 @@
 on:
   workflow_call:
     inputs:
-      # valid options: python, dotnet, golang, nodejs
-      organization_name:
-        description: Container registry organization name
-        required: false
-        #default: ${{ github.event.organization.name }}
-      image_name:
-        description: 'Container image name'
-        required: false
-        type: string
-        #default: ${{ github.event.repository.name }}
       image_tag:
         description: 'Container image tag'
-        required: true
+        required: false
         type: string
         default: latest
     secrets:
       registry_name:
-        description: Container registry hostname
+        description: Container registry name
         required: true
       registry_username:
         description: Container registry username
@@ -27,21 +17,34 @@ on:
         description: Password or personal access token used to log against the container registry
         required: true
 
-  
 jobs:
   ## Build container image and publish it
   build-container-image:
     name: Build container image
     runs-on: ubuntu-20.04
 
+    env:
+      # 'hub.docker.io'
+      REGISTRY_NAME: ${{secrets.registry_name}}
+      IMAGE_NAME: ${{ github.repository }}
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ inputs.target-directory }}
+
     steps:
       - name: Checkout repository codebase
         uses: actions/checkout@v3
 
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Login to container registry
         uses: docker/login-action@v2
         with:
-          registry: ${{ secrets.registry_hostname }}
+          registry: hub.docker.io
           username: ${{ secrets.registry_username }}
           password: ${{ secrets.registry_password }}
 
@@ -50,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./Dockerfile
           push: true
-          tags: ${{ secrets.registry_name }}/${{ inputs.organization_name }}/${{ inputs.image_name }}:${{ inputs.image_tag }}
-            
+          tags: ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}
+          cache-from: type=gha
+          cache-to: type=gha

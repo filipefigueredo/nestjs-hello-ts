@@ -1,0 +1,6 @@
+server:
+  hostname: localhost
+  timeout: 30000
+  port: 8080
+application:
+  debug: 'true'

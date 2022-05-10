@@ -34,8 +34,6 @@ jobs:
   build-container-image:
     name: Build container image
     runs-on: ubuntu-20.04
-    env: 
-      IMAGE_NAME: ${{ github.event.organization.name }}/${{ github.event.repository.name }}
 
     steps:
       - name: Checkout repository codebase
@@ -55,5 +53,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.registry_name }}/${{ inputs.organization_name }}/${{ inputs.repository_name }}:${{ inputs.image_tag }}
+          tags: ${{ secrets.registry_name }}/${{ inputs.organization_name }}/${{ inputs.image_name }}:${{ inputs.image_tag }}
             

@@ -5,15 +5,15 @@ on:
     inputs:
       # valid options: python, dotnet, golang, nodejs
       node-version:
-        description: "NodeJS version"
+        description: 'NodeJS version'
         required: false
         type: string
         default: '16'
       target-directory:
-        description: "Target working directory"
+        description: 'Target working directory'
         required: false
         type: string
-        default: "."
+        default: '.'
 
 jobs:
   snyk-scan:
@@ -26,7 +26,6 @@ jobs:
         working-directory: ${{ inputs.target-directory }}
 
     steps:
-
       - name: checkout repository
         uses: actions/checkout@v3
 
@@ -40,51 +39,3 @@ jobs:
       - run: npm run build
 
       - run: npm test
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      - name: Run Snyk scan for .Net
-        if: ${{ inputs.language-tooling == 'dotnet'}}
-        uses: snyk/actions/dotnet@master
-        env:
-          SNYK_TOKEN: ${{ secrets.snyk_api_token }}
-        with:
-          command: monitor
-
-      - name: Run Snyk scan for python
-        if: ${{ inputs.language-tooling == 'python'}}
-        uses: snyk/actions/python@master
-        env:
-          SNYK_TOKEN: ${{ secrets.snyk_api_token }}
-        with:
-          command: monitor
-
-      - name: Run Snyk scan for golang
-        if: ${{ inputs.language-tooling == 'golang'}}
-        uses: snyk/actions/golang@master
-        env:
-          SNYK_TOKEN: ${{ secrets.snyk_api_token }}
-        with:
-          command: monitor
-
-      - name: Run Snyk scan for nodeJS
-        if: ${{ inputs.language-tooling == 'nodejs'}}
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.snyk_api_token }}
-        with:
-          command: monitor

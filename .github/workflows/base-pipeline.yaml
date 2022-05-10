@@ -22,7 +22,6 @@ jobs:
   docker-image:
     name: docker image
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/docker.workflow.yaml@master
-    with:
     secrets:
       registry_name: ${{ secrets.CONTAINER_REGISTRY_NAME }}
       registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}

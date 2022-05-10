@@ -5,12 +5,12 @@ on:
       organization_name:
         description: Container registry organization name
         required: false
-        default: ${{ github.event.organization.name }}
+        #default: ${{ github.event.organization.name }}
       image_name:
         description: 'Container image name'
         required: false
         type: string
-        default: ${{ github.event.repository.name }}
+        #default: ${{ github.event.repository.name }}
       image_tag:
         description: 'Container image tag'
         required: true

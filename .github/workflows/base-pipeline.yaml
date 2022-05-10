@@ -19,3 +19,13 @@ jobs:
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/nodejs-build.workflow.yaml@master
     with:
       node-version: '16'
+  docker-image:
+    name: docker image
+    uses: filipefigueredo/nestjs-hello-ts/.github/workflows/docker.workflow.yaml@master
+    with:
+      image_tag: '1.0.0'
+    secrets:
+      registry_name: ${{ secrets.CONTAINER_REGISTRY_NAME }}
+      registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+      registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+

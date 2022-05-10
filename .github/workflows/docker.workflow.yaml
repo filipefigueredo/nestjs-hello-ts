@@ -28,6 +28,8 @@ on:
         description: Password or personal access token used to log against the container registry
         required: true
 
+  
+jobs:
   ## Build container image and publish it
   build-container-image:
     name: Build container image

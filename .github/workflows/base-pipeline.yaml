@@ -1,4 +1,4 @@
-name: Base NodeJS Pipeline
+name: base random nodejs pipeline
 
 on: 
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
 jobs:
 
   snyk-nodejs-scan:
-    name: NodeJS code scan
+    name: nodejs code scan
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-scan.workflow.yaml@master
     with:
       language-tooling: nodejs
@@ -15,7 +15,7 @@ jobs:
       snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}
 
   snyk-docker-scan:
-    name: Container image scan
+    name: container image scan
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-scan.workflow.yaml@master
     with:
       language-tooling: docker
@@ -24,17 +24,17 @@ jobs:
       snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}
 
   nodejs-build:
-    name: NodeJS build and test
+    name: nodejs build and test
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/nodejs-build.workflow.yaml@master
     with:
       node-version: '16'
 
   docker-image:
-    name: docker image
+    name: latest image
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/docker.workflow.yaml@master
 
   new-image:
-    needs: docker-image
+    needs: versioned-image
     name: new image
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/docker.workflow.yaml@master
     with:

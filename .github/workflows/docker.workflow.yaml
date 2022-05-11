@@ -6,16 +6,11 @@ on:
         required: false
         type: string
         default: latest
-    secrets:
-      registry_name:
-        description: Container registry name
-        required: true
-      registry_username:
-        description: Container registry username
-        required: true
-      registry_password:
-        description: Password or personal access token used to log against the container registry
-        required: true
+      target-directory:
+        description: "Target working directory"
+        required: false
+        type: string
+        default: "."
 
 jobs:
   ## Build container image and publish it
@@ -33,6 +28,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: ${{ inputs.target-directory }}
 
     steps:
       - name: Checkout repository codebase

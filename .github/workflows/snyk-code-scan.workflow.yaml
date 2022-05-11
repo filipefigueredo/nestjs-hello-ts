@@ -104,12 +104,13 @@ jobs:
         uses: snyk/actions/docker@master
         continue-on-error: true # To make sure that SARIF upload gets called
         with:
-          image: ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          args: --file=Dockerfile --sarif-file-output=snyk.sarif
+          image: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          args: --file=Dockerfile
+          #--sarif-file-output=snyk.sarif
 
       # Uploads SARIF file to see the result of tfsec in github repository
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v1
         with:
-          image: ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          image: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           sarif_file: snyk.sarif

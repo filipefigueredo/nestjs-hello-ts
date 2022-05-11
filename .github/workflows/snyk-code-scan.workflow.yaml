@@ -3,7 +3,7 @@ name: snyk scan
 on:
   workflow_call:
     inputs:
-      # valid options: python, dotnet, golang, nodejs
+      # valid options: python, dotnet, golang, nodejs and docker
       language-tooling:
         description: "Programming language or building tool used"
         required: false
@@ -23,43 +23,83 @@ jobs:
   snyk-scan:
     name: snyk scan
     runs-on: ubuntu-20.04
+    env:
+      SNYK_TOKEN: ${{ secrets.snyk_api_token }}
+      REGISTRY_NAME: 'ghcr.io'
+      IMAGE_NAME: ${{ github.repository }}
 
     defaults:
       run:
         shell: bash
+        working-directory: ${{ inputs.target-directory }}
 
     steps:
+      # Checkout repository
       - name: checkout repository
+        id: checkout
         uses: actions/checkout@v3
 
+      # Scan for python
       - name: Run Snyk scan for .Net
+        id: snyk-dotnet
         if: ${{ inputs.language-tooling == 'dotnet'}}
         uses: snyk/actions/dotnet@master
-        env:
-          SNYK_TOKEN: ${{ secrets.snyk_api_token }}
         with:
-          command: monitor
+          args: --sarif-file-output=snyk.sarif
 
-      - name: Run Snyk scan for python
-        if: ${{ inputs.language-tooling == 'python'}}
-        uses: snyk/actions/python@master
-        env:
-          SNYK_TOKEN: ${{ secrets.snyk_api_token }}
-        with:
-          command: monitor
-
-      - name: Run Snyk scan for golang
-        if: ${{ inputs.language-tooling == 'golang'}}
-        uses: snyk/actions/golang@master
-        env:
-          SNYK_TOKEN: ${{ secrets.snyk_api_token }}
-        with:
-          command: monitor
-
-      - name: Run Snyk scan for nodeJS
+      # Scan for python
+      - name: Run Snyk scan for nodejs
+        id: snyk-nodejs
         if: ${{ inputs.language-tooling == 'nodejs'}}
         uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.snyk_api_token }}
         with:
-          command: monitor
+          args: --sarif-file-output=snyk.sarif
+
+      # Scan for python
+      - name: Run Snyk scan for golang
+        id: snyk-golang
+        if: ${{ inputs.language-tooling == 'golang'}}
+        uses: snyk/actions/golang@master
+        continue-on-error: true # To make sure that SARIF upload gets called
+        with:
+          args: --sarif-file-output=snyk.sarif
+
+      # Scan for python
+      - name: Run Snyk scan for python
+        id: snyk-python
+        if: ${{ inputs.language-tooling == 'python'}}
+        uses: snyk/actions/python@master
+        continue-on-error: true # To make sure that SARIF upload gets called
+        with:
+          args: --sarif-file-output=snyk.sarif
+
+      # Scan for docker
+      - name: Login to container registry
+        id: registry-login
+        if: ${{ inputs.language-tooling == 'docker'}}    
+        uses: docker/login-action@v2        
+        with:
+          registry: ${{ env.REGISTRY_NAME }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      
+      - name: Docker image pull
+        id: image-pull
+        if: ${{ inputs.language-tooling == 'docker'}}
+        run: docker image pull ${{ env.IMAGE_NAME }}
+
+      - name: Run Snyk scan for docker
+        id: snyk-docker
+        if: ${{ inputs.language-tooling == 'docker'}}        
+        uses: snyk/actions/docker@master
+        continue-on-error: true # To make sure that SARIF upload gets called
+        with:
+          image: ${{ env.IMAGE_NAME }}
+          args: --file=Dockerfile --sarif-file-output=snyk.sarif
+      
+      # Uploads SARIF file to see the result of tfsec in github repository
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          image: ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}
+          sarif_file: snyk.sarif

@@ -20,9 +20,6 @@ jobs:
     name: Build container image
     runs-on: ubuntu-20.04
 
-    permissions:
-      packages: write
-
     env:
       REGISTRY_NAME: 'ghcr.io'
       IMAGE_NAME: ${{ github.repository }}
@@ -31,6 +28,9 @@ jobs:
       run:
         shell: bash
         working-directory: ${{ inputs.target-directory }}
+
+    permissions:
+      packages: write
 
     steps:
       - name: Checkout repository codebase

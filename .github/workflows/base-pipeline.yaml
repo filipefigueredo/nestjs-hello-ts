@@ -8,7 +8,7 @@ jobs:
 
   snyk-nodejs-scan:
     name: NodeJS code scan
-    uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-code-scan.workflow.yaml@master
+    uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-scan.workflow.yaml@master
     with:
       language-tooling: nodejs
     secrets:
@@ -16,7 +16,7 @@ jobs:
 
   snyk-docker-scan:
     name: Container image scan
-    uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-code-scan.workflow.yaml@master
+    uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-scan.workflow.yaml@master
     with:
       language-tooling: docker
       image_tag: latest
@@ -28,7 +28,7 @@ jobs:
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/nodejs-build.workflow.yaml@master
     with:
       node-version: '16'
-      
+
   docker-image:
     name: docker image
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/docker.workflow.yaml@master

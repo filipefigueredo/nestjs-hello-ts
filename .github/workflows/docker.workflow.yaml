@@ -23,8 +23,10 @@ jobs:
     name: Build container image
     runs-on: ubuntu-20.04
 
+    permissions:
+      packages: write
+
     env:
-      # 'hub.docker.io'
       REGISTRY_NAME: 'ghcr.io'
       IMAGE_NAME: ${{ github.repository }}
 
@@ -45,7 +47,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY_NAME }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ github.token }}
 
       - name: Build and push container image
         id: docker_build

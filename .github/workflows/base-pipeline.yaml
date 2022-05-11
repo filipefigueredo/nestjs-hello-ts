@@ -6,11 +6,19 @@ on:
 
 jobs:
 
-  snyk:
+  snyk-nodejs-scan:
     name: Code security scan
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-code-scan.workflow.yaml@master
     with:
       language-tooling: nodejs
+    secrets:
+      snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}
+
+  snyk-docker-scan:
+    name: Code security scan
+    uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-code-scan.workflow.yaml@master
+    with:
+      language-tooling: docker
     secrets:
       snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}
 
@@ -27,3 +35,11 @@ jobs:
       registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
       registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
 
+  new-image:
+    needs: docker-image
+    name: new image
+    uses: filipefigueredo/nestjs-hello-ts/.github/workflows/docker.workflow.yaml@master
+    secrets:
+      registry_name: ${{ secrets.CONTAINER_REGISTRY_NAME }}
+      registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+      registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}

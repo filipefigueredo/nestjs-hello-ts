@@ -26,7 +26,7 @@ jobs:
     env:
       # 'hub.docker.io'
       REGISTRY_NAME: 'ghcr.io'
-      IMAGE_NAME: ${{ github.event.organization.name }}/${{ github.event.repository.name }}
+      IMAGE_NAME: ${{ github.repository }}
 
     defaults:
       run:

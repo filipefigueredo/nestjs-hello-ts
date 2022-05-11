@@ -96,7 +96,7 @@ jobs:
       - name: Docker image pull
         id: image-pull
         if: ${{ inputs.language-tooling == 'docker'}}
-        run: docker image pull ${{ env.IMAGE_NAME }}
+        run: docker image pull ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
       - name: Run Snyk scan for docker
         id: snyk-docker

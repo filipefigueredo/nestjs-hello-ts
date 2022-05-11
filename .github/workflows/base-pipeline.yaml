@@ -31,7 +31,7 @@ jobs:
     name: build versioned container image
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/container-image.workflow.yaml@master
     with:
-      image_tag: '1.0.0'
+      container_image_tag: '1.0.0'
 
   output:
     needs: versioned-container-image

@@ -35,5 +35,5 @@ jobs:
 
   latest-container-image:
     name: build latest container image
-    needs: versioned-container-image:
+    needs: versioned-container-image
     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/docker.workflow.yaml@master

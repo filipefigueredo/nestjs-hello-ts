@@ -16,8 +16,8 @@ on:
         default: '.'
 
 jobs:
-  snyk-scan:
-    name: snyk scan
+  nodejs-build-test:
+    name: nodejs build and test
     runs-on: ubuntu-20.04
 
     defaults:

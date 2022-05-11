@@ -15,16 +15,13 @@ jobs:
     name: Build container image
     runs-on: ubuntu-20.04
 
-
-  permissions:
-    packages: write
-
     env:
       CONTAINER_REGISTRY_NAME: 'ghcr.io'
 
     defaults:
       run:
         shell: bash
+        
     outputs:
       container_image: ${{ steps.lowercase.outputs.container_image_name }}
     steps:

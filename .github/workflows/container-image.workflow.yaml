@@ -1,4 +1,4 @@
-name: container image build
+name: container image build and publish
 
 on:
   workflow_call:
@@ -10,9 +10,9 @@ on:
         default: latest
 
 jobs:
-  ## Build container image and publish it
+  ## Build container image and publish it to container registry
   build-container-image:
-    name: Build container image
+    name: build and publish container image
     runs-on: ubuntu-20.04
 
     env:
@@ -21,22 +21,20 @@ jobs:
     defaults:
       run:
         shell: bash
-        
-    outputs:
-      container_image: ${{ steps.lowercase.outputs.container_image_name }}
+
     steps:
-      # - name: Checkout repository
-      #   uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # - name: Set up / Install Docker Buildx
-      #   uses: docker/setup-buildx-action@v2
+      - name: Set up / Install Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      # - name: Login to container registry
-      #   uses: docker/login-action@v2
-      #   with:
-      #     registry: ${{ env.REGISTRY_NAME }}
-      #     username: ${{ github.actor }}
-      #     password: ${{ github.token }}
+      - name: Login to container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY_NAME }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
 
       # Parse and lower case image name
       - name: Parse container image name
@@ -44,14 +42,14 @@ jobs:
         run: |
           parsed_string=$(echo "${{ env.CONTAINER_REGISTRY_NAME }}/${{github.repository_owner}}/${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')          
           echo "::set-output name=container_image_name::${parsed_string}"
-      
-      - run: echo ${{ steps.lowercase.outputs.container_image_name }}
 
-      # - name: Build and push container image
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: .
-      #     push: true
-      #     tags: ${{ steps.lowercase.container_image_name }}:${{ inputs.container_image_tag }}
-      #     cache-from: type=gha
-      #     cache-to: type=gha
+      # Build and push the container image to container registry
+      # Note: this step uses GitHub Cache AOI to fetch and upload container image layers
+      - name: Build and push container image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.lowercase.container_image_name }}:${{ inputs.container_image_tag }}
+          cache-from: type=gha
+          cache-to: type=gha

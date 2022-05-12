@@ -4,28 +4,28 @@ on:
   workflow_dispatch:
 
 jobs:
-#   snyk-nodejs-scan:
-#     name: nodejs code scan
-#     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-scan.workflow.yaml@master
-#     with:
-#       language-tooling: nodejs
-#     secrets:
-#       snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}
+  #   snyk-nodejs-scan:
+  #     name: nodejs code scan
+  #     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-scan.workflow.yaml@master
+  #     with:
+  #       language-tooling: nodejs
+  #     secrets:
+  #       snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}
 
-#   snyk-docker-scan:
-#     name: container image scan
-#     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-scan.workflow.yaml@master
-#     with:
-#       language-tooling: docker
-#       image_tag: latest
-#     secrets:
-#       snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}
+  #   snyk-docker-scan:
+  #     name: container image scan
+  #     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/snyk-scan.workflow.yaml@master
+  #     with:
+  #       language-tooling: docker
+  #       image_tag: latest
+  #     secrets:
+  #       snyk_api_token: ${{ secrets.SNYK_API_TOKEN }}
 
-#   nodejs-build:
-#     name: nodejs build and test
-#     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/nodejs-build.workflow.yaml@master
-#     with:
-#       node-version: '16'
+  #   nodejs-build:
+  #     name: nodejs build and test
+  #     uses: filipefigueredo/nestjs-hello-ts/.github/workflows/nodejs-build.workflow.yaml@master
+  #     with:
+  #       node-version: '16'
 
   versioned-container-image:
     name: build versioned container image
@@ -33,12 +33,7 @@ jobs:
     with:
       container_image_tag: '1.0.0'
 
-  output:
+  latest-container-image:
+    name: build latest container image
     needs: versioned-container-image
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo ${{ needs.versioned-container-image.outputs.container_image }}
-  #latest-container-image:
-  #  name: build latest container image
-  #  needs: versioned-container-image
-  #  uses: Nmbrs/reusable-workflow/.github/workflows/docker.workflow.yaml@feature/add-docker-workflow
+    uses: filipefigueredo/nestjs-hello-ts/.github/workflows/container-image.workflow.yaml@master

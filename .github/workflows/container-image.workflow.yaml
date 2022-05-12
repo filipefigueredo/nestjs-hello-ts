@@ -40,7 +40,8 @@ jobs:
       - name: Parse container image name
         id: lowercase
         run: |
-          parsed_string=$(echo "${{ env.CONTAINER_REGISTRY_NAME }}/${{github.repository_owner}}/${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')          
+          parsed_string=$(echo "${{ env.CONTAINER_REGISTRY_NAME }}/${{github.repository_owner}}/${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
+          echo "$parsed_string"
           echo "::set-output name=container_image_name::$parsed_string"
       - name: echo
         run: echo "${{ env.CONTAINER_REGISTRY_NAME }}/${{github.repository_owner}}/A" | tr '[:upper:]' '[:lower:]'

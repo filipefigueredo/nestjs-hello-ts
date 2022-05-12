@@ -42,7 +42,7 @@ jobs:
         run: |
           parsed_string=$(echo "${{ env.CONTAINER_REGISTRY_NAME }}/${{github.repository_owner}}/${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
           echo "$parsed_string"
-          echo "::set-output name=container_image_name::$parsed_string"
+          echo "::set-output name=container_image_name::$(echo "${{ env.CONTAINER_REGISTRY_NAME }}/${{github.repository_owner}}/${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')"
       - name: echo
         run: echo "${{ env.CONTAINER_REGISTRY_NAME }}/${{github.repository_owner}}/A" | tr '[:upper:]' '[:lower:]'
       - name: aye aye

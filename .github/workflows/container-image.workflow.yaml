@@ -42,7 +42,10 @@ jobs:
         run: |
           parsed_string=$(echo "${{ env.CONTAINER_REGISTRY_NAME }}/${{github.repository_owner}}/${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')          
           echo "::set-output name=container_image_name::$parsed_string"
-      - run: echo "${{ steps.lowercase.container_image_name }}"
+      - name: echo
+        run: echo "${{ env.CONTAINER_REGISTRY_NAME }}/${{github.repository_owner}}/${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]'"
+      - name: aye aye
+        run: echo "${{ steps.lowercase.container_image_name }}"
 
       # Build and push the container image to container registry
       # Note: this step uses GitHub Cache AOI to fetch and upload container image layers
